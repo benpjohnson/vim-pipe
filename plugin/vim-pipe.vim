@@ -1,6 +1,7 @@
-nnoremap <silent> <LocalLeader>r :call VimPipe()<CR>
+nnoremap <silent> <LocalLeader>r :%call VimPipe()<CR>
+vnoremap <silent> <LocalLeader>r :call VimPipe()<CR>
 
-function! VimPipe() " {
+function! VimPipe() range " {
 	" Save local settings.
 	let saved_unnamed_register = @@
 	let switchbuf_before = &switchbuf
@@ -65,8 +66,11 @@ function! VimPipe() " {
 		let l:parent_contents = getbufline(l:parent_buffer, 0, "$")
 		call append(line('0'), l:parent_contents)
 
+		" Generate Ex expression for the selected range
+		let range = a:firstline . "," . a:lastline
+
 		let l:start = reltime()
-		silent execute ":%!" . l:vimpipe_command
+		silent execute ":" . range . "!" . l:vimpipe_command
 		let l:duration = reltimestr(reltime(start))
 		silent call append(0, ["# Pipe command took:" . duration . "s", ""])
 	endif
