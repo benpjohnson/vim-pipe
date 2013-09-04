@@ -70,7 +70,7 @@ function! VimPipe() range " {
 		let range = a:firstline . "," . a:lastline
 
 		let l:start = reltime()
-		silent execute ":" . range . "!" . l:vimpipe_command
+		silent execute ":%!" . l:vimpipe_command
 		let l:duration = reltimestr(reltime(start))
 		silent call append(0, ["# Pipe command took:" . duration . "s", ""])
 	endif
