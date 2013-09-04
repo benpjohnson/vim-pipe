@@ -63,7 +63,7 @@ function! VimPipe() range " {
 	if empty(l:vimpipe_command)
 		silent call append(0, ["", "# See :help vim-pipe for setup advice."])
 	else
-		let l:parent_contents = getbufline(l:parent_buffer, 0, "$")
+		let l:parent_contents = getbufline(l:parent_buffer, a:firstline, a:lastline)
 		call append(line('0'), l:parent_contents)
 
 		" Generate Ex expression for the selected range
