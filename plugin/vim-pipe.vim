@@ -89,4 +89,20 @@ function! VimPipe() range " {
 	let @@ = saved_unnamed_register
 endfunction " }
 
+" Find a block of embeded code to run
+" FIXME: think about decent delimiters we can grab filetypes from
+" FIXME: validate filetypes
+" FIXME: how to extract filetype-specific vimpipecommands from ftconfig..
+" probably just use a map
+function! FindBlock()
+    let l:start = search('^#sql$', 'b')
+    let l:end = searchpairpos('#sql', '',  '#end:sql')
+
+    "FIXME: Fix start location
+    echo l:start[1] . ' ' . l:end[0]
+
+    " Now build an Ex range and pass it and a filetype override to the main
+    " function
+endfunction
+
 " vim: set foldmarker={,} foldlevel=1 foldmethod=marker:
