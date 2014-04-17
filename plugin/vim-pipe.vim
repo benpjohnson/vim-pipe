@@ -1,7 +1,14 @@
-nnoremap <silent> <LocalLeader>r :%call VimPipe()<CR>
-vnoremap <silent> <LocalLeader>r :call VimPipe()<CR>
+"FIXME maybe use another function to keep the default calls clean
+nnoremap <silent> <LocalLeader>r :%call VimPipe('')<CR>
+vnoremap <silent> <LocalLeader>r :call VimPipe('')<CR>
 
-function! VimPipe() range " {
+" The 'open window above' bug seems to be caused by having multiple output
+" buffers of the same type. Probably just need to stick source buffer id into
+" name or something
+"
+" CONFIRMED: it's pulling the results from the wrong buffer
+
+function! VimPipe(command) range " {
 	" Save local settings.
 	let saved_unnamed_register = @@
 	let switchbuf_before = &switchbuf
@@ -56,8 +63,13 @@ function! VimPipe() range " {
 	" Clear the buffer.
 	execute ":%d _"
 
-	" Lookup the vimpipe command from the parent.
-	let l:vimpipe_command = getbufvar( b:vimpipe_parent, 'vimpipe_command' )
+    " Let us override the command with a custom one
+    if len(a:command) > 0
+        let l:vimpipe_command = a:command
+    else
+        " Lookup the vimpipe command from the parent.
+        let l:vimpipe_command = getbufvar( b:vimpipe_parent, 'vimpipe_command' )
+    endif
 
 	" Call the pipe command, or give a hint about setting it up.
 	if empty(l:vimpipe_command)
